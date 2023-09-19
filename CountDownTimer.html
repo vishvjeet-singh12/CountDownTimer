@@ -1,0 +1,136 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CountDown Timer</title>
+    <style>
+        body{
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: rgb(66, 72, 78);
+        }.box{
+            border: 2px solid black;
+            padding: 30px;
+            background-color:rgb(128, 95, 95);
+            box-shadow: 2px 2px 10px 5px black;
+        }
+        #heading{
+            font-size: 30px;
+            text-align: center;
+            margin-bottom: 15px;
+            color: white;
+        }
+       
+        input{
+            padding: 10px;
+            border: none;
+            margin-left: 8px;
+            font-size: 20px;
+            width: 80px;
+            text-align: center;
+        }
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button{
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        button{
+            font-size: 20px;
+            padding: 8px;
+        }
+        .button{
+            margin-top: 30px;
+            text-align: center;
+        }   
+        #start{
+            background-color: rgba(12, 231, 12, 0.59);
+            margin-right: 10px;
+            color: white;
+        }
+        #stop{
+            background-color: rgba(24, 142, 215, 0.259);
+            color: white;
+        }
+        #reset{
+            background-color: red;
+            margin-left: 10px;
+            color: white;
+        }
+     </style>
+    </head>
+<body>
+    <div class="box">
+        <div id="heading">Timer</div>
+        <form action="#">
+            <input type="number" id="hour" placeholder="HR" autocomplete="off" value="0">
+            <input type="number" id="minute" placeholder="MIN" autocomplete="off" value="0">
+            <input type="number" id="second" placeholder="SEC" autocomplete="off" value="0">
+        </form>
+        <div class="button">
+            <button id="start">Start</button>
+            <button id="stop" onclick="stopTimer()">Stop</button>
+            <button id="reset">Reset</button>
+        </div>
+    </div>
+    <script>
+        const hour = document.getElementById("hour");
+        const minute = document.getElementById("minute");
+        const second = document.getElementById("second");
+
+        const start = document.getElementById("start");
+        const reset = document.getElementById("reset");
+        const heading = document.getElementById("heading");
+        let interval = null;
+        let total = 0;
+
+        const totalValue = () => {
+            total = Number(hour.value) * 3600 + Number(minute.value) * 60 + Number(second.value);
+        }
+
+        const updateDisplay = () => {
+            const hr = Math.floor(total / 3600);
+            const min = Math.floor((total / 60) - (hr * 60));
+            const sec = total - ((hr * 3600) + (min * 60));
+
+            hour.value = hr;
+            minute.value = min;
+            second.value = sec;
+        }
+
+        const timer = () => {
+            totalValue();
+            total--;
+
+            if (total >= 0) {
+                updateDisplay();
+            } else {
+                clearInterval(interval);
+                heading.innerText = "Time Over!!";
+            }
+        }
+
+        start.addEventListener('click', () => {
+            clearInterval(interval);
+            totalValue();
+            interval = setInterval(timer, 1000);
+            heading.innerText = "Timer Started";
+        });
+
+        reset.addEventListener('click', () => {
+            clearInterval(interval);
+            hour.value = 0;
+            minute.value = 0;
+            second.value = 0;
+            heading.innerText = "Timer";
+        });
+
+        function stopTimer() {
+            clearInterval(interval);
+            heading.innerText = "Timer Stopped";
+        }
+    </script>
+</body>
+</html>
